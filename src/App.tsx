@@ -11,7 +11,7 @@ function App() {
       <Header className="App-header">
         <h3>Autocomplete API</h3>
         <p>
-          Enter a search term and click "Search" to query the API
+          Enter a search term to query the API.
         </p>
       </Header>
       <Autocomplete />
