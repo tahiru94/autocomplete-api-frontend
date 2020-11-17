@@ -2,43 +2,65 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 
-import { Search } from '../../components';
-import Results from '../../components/List/Results';
+import { Search, DetailView, Results } from '../../components';
+
 import Person from '../../models/person';
+import {
+    filterSearchByStringFields
+} from '../../utils';
 
 interface State {
     searchTerm: string;
     people: Person[];
+    selectedIndex: number;
 }
 
 class Autocomplete extends Component<{}, State> {
     state: State = {
         searchTerm: '',
-        people: []
+        people: [],
+        selectedIndex: -1
     }
 
     onSearchTermUpdate = (searchTerm: string) => {
         let apiResult: Person[] = [];
 
         axios.get(`http://127.0.0.1:8080/?search=${searchTerm}`).then((result) => {
-            // console.log(result);
             apiResult = result.data;
-            console.log('apiResult', apiResult);
+
+            const populatedResults: boolean = (searchTerm.length > 0 && apiResult.length > 0);
 
             this.setState({
                 searchTerm,
-                people: apiResult.length ? apiResult : []
+                people: populatedResults ?
+                    filterSearchByStringFields(searchTerm, apiResult) :
+                    []
             });
         }).catch((error) => {
             console.log(error);
         });
     }
 
+    onItemClick = (id: number) => {
+        this.setState({ selectedIndex: id });
+    }
+
+    getDetailViewContext = () => {
+        if (this.state.selectedIndex !== -1) {
+            return this.state.people.filter((person: Person) => person.id === this.state.selectedIndex)[0];
+        }
+    }
+
     render() {
         return (
             <Wrapper>
-                <Search onSearchTermUpdate={this.onSearchTermUpdate} />
-                <Results people={this.state.people} />
+                <Inputs>
+                    <Search onSearchTermUpdate={this.onSearchTermUpdate} />
+                    <Results people={this.state.people} onItemClick={this.onItemClick.bind(this)} />
+                </Inputs>
+                <SelectedInput>
+                    <DetailView person={this.getDetailViewContext()} />
+                </SelectedInput>
             </Wrapper>
         );
     }
@@ -47,7 +69,16 @@ class Autocomplete extends Component<{}, State> {
 const Wrapper = styled(`div`)`
     width: 100vw;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    margin-top: 12px;
+`;
+
+const Inputs = styled(`div`)`
+    width: 50vw;
+`;
+
+const SelectedInput = styled(`div`)`
+    width: 50vw;
     justify-content: center;
     align-items: center;
 `;

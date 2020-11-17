@@ -5,6 +5,7 @@ import Person from '../../models/person';
 
 interface Props {
     people: Person[];
+    onItemClick: (id: number) => void;
 }
 
 class Results extends Component<Props, {}> {
@@ -12,7 +13,7 @@ class Results extends Component<Props, {}> {
     generateListItems() {
         return this.props.people.map((person: Person) => {
             return (
-                <ListItem key={person.id}>
+                <ListItem button key={person.id} onClick={() => this.props.onItemClick(person.id)}>
                     {person.name}
                 </ListItem>
             );
@@ -36,8 +37,6 @@ const Wrapper = styled(`div`)`
     height: 250px;
     margin: 12px;
     display: flex;
-    justify-content: center;
-    align-items: center;
     overflow: scroll;
 `;
 
