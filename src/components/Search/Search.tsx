@@ -29,7 +29,7 @@ class Search extends Component<Props> {
 
 const Wrapper = styled(`div`)`
     width: 100vw;
-    height: 240px;
+    height: 80px;
     display: flex;
     flex-direction: row;
     align-items: center;
