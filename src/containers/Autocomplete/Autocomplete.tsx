@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
+// Component imports
+import { Search } from '../../components';
+
 class Autocomplete extends Component {
     state = {
         searchTerm: '',
@@ -22,7 +25,7 @@ class Autocomplete extends Component {
 
     render() {
         return (
-            <div>Placeholder</div>
+            <Search />
         );
     }
 }
