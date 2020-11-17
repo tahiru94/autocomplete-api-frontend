@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
-import { Input, Button } from '@material-ui/core';
+import { Input, /* Button */ } from '@material-ui/core';
 import styled from 'styled-components';
 
-class Search extends Component {
+interface Props {
+    onSearchTermUpdate: (term: string) => void;
+}
+
+class Search extends Component<Props> {
 
     onInput(e: any) {
         const input = e.currentTarget.value;
-        console.log(input);
+        this.props.onSearchTermUpdate(input);
     }
 
     render() {
@@ -15,9 +19,9 @@ class Search extends Component {
                 <Item>
                     <Input onChange={(e) => this.onInput(e)} placeholder="Enter search term" />
                 </Item>
-                <Item>
+                {/* <Item>
                     <Button variant="contained" color="primary">Search</Button>
-                </Item>
+                </Item> */}
             </Wrapper>
         );
     }

@@ -4,15 +4,21 @@ import axios from 'axios';
 // Component imports
 import { Search } from '../../components';
 
-class Autocomplete extends Component {
-    state = {
+interface State {
+    searchTerm: string;
+}
+
+class Autocomplete extends Component<{}, State> {
+    state: State = {
         searchTerm: '',
     }
 
-    onSearchTermUpdate(searchTerm: string) {
+    onSearchTermUpdate = (searchTerm: string) => {
         this.setState({
             searchTerm
         });
+
+        console.log(this.state);
     }
 
     async onSearch() {
@@ -25,7 +31,7 @@ class Autocomplete extends Component {
 
     render() {
         return (
-            <Search />
+            <Search onSearchTermUpdate={this.onSearchTermUpdate} />
         );
     }
 }
