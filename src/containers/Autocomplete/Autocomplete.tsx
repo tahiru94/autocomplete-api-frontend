@@ -4,9 +4,11 @@ import styled from 'styled-components';
 
 import { Search, DetailView, Results } from '../../components';
 
-import Person from '../../models/person';
+import { Person } from '../../models';
 import {
-    filterSearchByStringFields
+    filterSearchByStringFields,
+    sortByEmail,
+    sortByName
 } from '../../utils';
 
 interface State {
@@ -29,11 +31,13 @@ class Autocomplete extends Component<{}, State> {
             apiResult = result.data;
 
             const populatedResults: boolean = (searchTerm.length > 0 && apiResult.length > 0);
+            const filteredResults: Person[] = filterSearchByStringFields(searchTerm, apiResult);
+            const sortedResults: Person[] = sortByName(searchTerm, sortByEmail(searchTerm, filteredResults));
 
             this.setState({
                 searchTerm,
                 people: populatedResults ?
-                    filterSearchByStringFields(searchTerm, apiResult) :
+                    sortedResults :
                     []
             });
         }).catch((error) => {

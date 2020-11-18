@@ -6,7 +6,7 @@ import {
     Typography
 } from '@material-ui/core';
 import styled from 'styled-components';
-import Person from '../../models/person';
+import { Person } from '../../models';
 
 interface Props {
     person: Person | undefined;
