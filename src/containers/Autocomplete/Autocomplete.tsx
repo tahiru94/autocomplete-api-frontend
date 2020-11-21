@@ -8,7 +8,8 @@ import { Person } from '../../models';
 import {
     filterSearchByStringFields,
     sortByEmail,
-    sortByName
+    sortByName,
+    debounce
 } from '../../utils';
 
 interface State {
@@ -45,6 +46,10 @@ class Autocomplete extends Component<{}, State> {
         });
     }
 
+    onSearchTermUpdateWrapper = (searchTerm: string) => {
+        debounce(this.onSearchTermUpdate(searchTerm), 500);
+    }
+
     onItemClick = (id: number) => {
         this.setState({ selectedIndex: id });
     }
@@ -59,7 +64,7 @@ class Autocomplete extends Component<{}, State> {
         return (
             <Wrapper>
                 <Inputs>
-                    <Search onSearchTermUpdate={this.onSearchTermUpdate} />
+                    <Search onSearchTermUpdate={this.onSearchTermUpdateWrapper} />
                     <Results people={this.state.people} onItemClick={this.onItemClick.bind(this)} />
                 </Inputs>
                 <SelectedInput>
